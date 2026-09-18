@@ -1,0 +1,15 @@
+{
+  "name": "cancha-libre",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reservas de canchas de fútbol 5 — proyecto ejemplo del curso 'GS en la práctica' (PragmaWorks)",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "gate": "sh .githooks/gate-componible.sh"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
