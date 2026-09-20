@@ -1,11 +1,13 @@
 // F-005: la API HTTP mínima sobre el módulo reservas (docs/features/F-005-api-http.md).
 // F-006: las reservas persisten en SQLite (docs/features/F-006-persistencia-sqlite.md).
+// F-007: los ids son UUID inyectados, sobreviven al reinicio (docs/features/F-007-ids-que-no-se-pisan.md).
 // Acá se arma el sistema: la API conoce las implementaciones y se las inyecta a reservas.
 // reservas sigue conociendo solo interfaces (regla 4 del archivo raíz).
 // Sin dependencias nuevas: node:http y node:sqlite. Se corre con `npm run api`.
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { moduloReservas, ErrorDeReserva } from '../reservas/reservas.ts';
 import { repositorioSqlite } from './repositorioSqlite.ts';
+import { generadorUuid } from '../reservas/generadorUuid.ts';
 import { proveedorSimulado } from '../pagos/proveedorSimulado.ts';
 import { porConsola } from '../notificaciones/porConsola.ts';
 
@@ -13,6 +15,7 @@ const rutaDb = process.env.DB_PATH ?? 'cancha.db';
 const repositorio = repositorioSqlite(rutaDb);
 const reservas = moduloReservas({
   repositorio,
+  ids: generadorUuid(),
   pagos: proveedorSimulado(),
   notificaciones: porConsola().port,
 });

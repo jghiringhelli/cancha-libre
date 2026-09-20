@@ -3,6 +3,7 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { moduloReservas, ErrorDeReserva } from '../../src/reservas/reservas';
 import { repositorioEnMemoria } from '../../src/reservas/repositorio';
+import { generadorUuid } from '../../src/reservas/generadorUuid';
 import { proveedorSimulado } from '../../src/pagos/proveedorSimulado';
 import { porConsola } from '../../src/notificaciones/porConsola';
 
@@ -11,6 +12,7 @@ const sabado = (hora: number, minutos = 0) => new Date(2026, 8, 19, hora, minuto
 function armarModulo() {
   return moduloReservas({
     repositorio: repositorioEnMemoria(),
+    ids: generadorUuid(),
     pagos: proveedorSimulado(),
     notificaciones: porConsola({ silencioso: true }).port,
   });

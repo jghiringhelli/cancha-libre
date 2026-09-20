@@ -3,8 +3,11 @@
 **Qué hace:** crear y cancelar reservas de una cancha, haciendo cumplir las reglas 1–3 del
 [archivo raíz](../../CANCHA-LIBRE.md).
 
-**Qué conoce:** SOLO las interfaces `PagosPort` y `NotificacionesPort`, y su propio
-`RepositorioReservas`. Jamás una implementación ajena (regla 4, defendida por el gate).
+**Qué conoce:** SOLO las interfaces `PagosPort` y `NotificacionesPort`, y sus propias
+`RepositorioReservas` y `GeneradorDeIds`. Jamás una implementación ajena (regla 4, defendida por el gate).
+
+**No fabrica ids:** los pide al generador inyectado (`GeneradorDeIds.nuevoId()`, UUID). Un id que
+salga de un contador del proceso se pisa al reiniciar — pasó (ADR 0004) y lo frena `gate-ids.sh`.
 
 **Su contrato principal:** `crearReserva` rechaza con `SUPERPOSICION_DE_RESERVA` cualquier
 reserva que se pise con otra de la misma cancha (los bordes exactos NO se pisan: una reserva

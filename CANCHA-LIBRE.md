@@ -49,11 +49,14 @@ de casi todos estos — ahí están las consecuencias, verificables en el códig
 | Una sola forma de parsear y comparar fechas. Nada de armar horas concatenando strings | en el gemelo, `hora+1+':00'` produce **"24:00"**, una hora que no existe | nunca |
 | Un test sin `expect` no es un test | en el gemelo, `tests/test.js` imprime "todo ok" sin afirmar nada: dio permiso para no mirar durante meses | nunca |
 | Los números de negocio (seña, horas de cancelación) salen de su decisión registrada, no inline | en el gemelo conviven **tres** versiones de la seña y una constante de cancelación muerta que nadie confirmó | nunca: si el número cambia, cambia el registro primero |
+| Ningún identificador que se persista depende del estado de un proceso: los ids los da un generador inyectado (`GeneradorDeIds`, UUID), nunca un contador ni `Date.now()` | ADR 0004 — tras reiniciar el servidor, `reserva-${++secuencia}` volvió a dar `reserva-1` y **pisó la fila de otro cliente**; lo encontró `npm run integracion` y lo frena `.githooks/gate-ids.sh` | nunca |
 
 ## 5. Cómo correrlo
 ```bash
 npm install
 npm test          # toda la suite
-npm run gate      # el chequeo de componibilidad, a mano
+npm run gate      # los gates (componibilidad + ids persistentes), a mano
+npm run api       # el servidor (SQLite en DB_PATH, default cancha.db)
+npm run integracion   # la verificación en tres capas contra el servidor andando
 ```
-Gate en cada commit: ver [`COMO-INSTALAR-EL-GATE.md`](COMO-INSTALAR-EL-GATE.md).
+Gates y suite en cada commit: ver [`COMO-INSTALAR-EL-GATE.md`](COMO-INSTALAR-EL-GATE.md).

@@ -2,6 +2,7 @@
 import { describe, test, expect } from 'vitest';
 import { moduloReservas } from '../../src/reservas/reservas';
 import { repositorioEnMemoria } from '../../src/reservas/repositorio';
+import { generadorUuid } from '../../src/reservas/generadorUuid';
 import { proveedorSimulado } from '../../src/pagos/proveedorSimulado';
 import { porConsola } from '../../src/notificaciones/porConsola';
 
@@ -11,7 +12,7 @@ function armar(opciones?: { rechazarPagos?: boolean; ahora?: () => Date }) {
   const repositorio = repositorioEnMemoria();
   const pagos = proveedorSimulado({ rechazarTodo: opciones?.rechazarPagos });
   const avisos = porConsola({ silencioso: true });
-  const reservas = moduloReservas({ repositorio, pagos, notificaciones: avisos.port, ahora: opciones?.ahora });
+  const reservas = moduloReservas({ repositorio, ids: generadorUuid(), pagos, notificaciones: avisos.port, ahora: opciones?.ahora });
   return { reservas, repositorio, pagos, historial: avisos.historial };
 }
 

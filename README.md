@@ -10,8 +10,8 @@ demuestran los prácticos del curso **GS Core** de PragmaWorks (Especificación 
 git clone https://github.com/jghiringhelli/cancha-libre
 cd cancha-libre
 npm install
-npm test        # 18 tests en verde
-npm run gate    # el chequeo de componibilidad
+npm test        # 20 tests en verde
+npm run gate    # los gates: componibilidad + ids persistentes
 ```
 
 Después, abrí `CANCHA-LIBRE.md`: es el archivo raíz, el que tu asistente lee al arrancar cada sesión.

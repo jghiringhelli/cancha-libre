@@ -3,6 +3,7 @@
 import type { PagosPort } from '../pagos/PagosPort';
 import type { NotificacionesPort } from '../notificaciones/NotificacionesPort';
 import type { RepositorioReservas } from './repositorio';
+import type { GeneradorDeIds } from './GeneradorDeIdsPort';
 
 export interface Reserva {
   id: string;
@@ -23,6 +24,7 @@ export class ErrorDeReserva extends Error {
 
 interface Dependencias {
   repositorio: RepositorioReservas;
+  ids: GeneradorDeIds;                 // F-007: los ids vienen de afuera, nunca de un contador del proceso
   pagos: PagosPort;
   notificaciones: NotificacionesPort;
   ahora?: () => Date;                 // inyectable para tests deterministas
@@ -36,7 +38,6 @@ function seSuperponen(aInicio: Date, aFin: Date, bInicio: Date, bFin: Date): boo
 
 export function moduloReservas(deps: Dependencias) {
   const ahora = deps.ahora ?? (() => new Date());
-  let secuencia = 0;
 
   return {
     /** Regla 1 (no superposición) + Regla 2 (sin seña no hay reserva). */
@@ -52,7 +53,7 @@ export function moduloReservas(deps: Dependencias) {
       if (!cobro.ok) throw new ErrorDeReserva('SENA_RECHAZADA');
 
       const reserva: Reserva = {
-        id: `reserva-${++secuencia}`,
+        id: deps.ids.nuevoId(),
         ...datos,
         pagoId: cobro.pagoId,
         estado: 'CONFIRMADA',
