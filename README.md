@@ -27,7 +27,17 @@ Si tu herramienta busca otro nombre (`AGENTS.md`, `CLAUDE.md`), copiá ese conte
 | 4 | Tu sentinela en quince minutos | pragmaworks.dev/curso/p4 |
 | 5 | Calificá tu spec | pragmaworks.dev/curso/p5 |
 
-Cada práctico arranca desde este estado limpio. Si venís de otro, volvé: `git checkout . && git clean -fd`.
+Cada práctico tiene su punto de partida marcado en el repo, por si no hiciste el anterior o querés arrancar limpio:
+
+```bash
+git checkout p1-inicio   # = main, el proyecto limpio (P1 y P2 arrancan de acá)
+git checkout p3-inicio   # lo que quedó al terminar P2 (API + SQLite + integración)
+git checkout p4-inicio   # lo que quedó al terminar P3 (ids UUID, gate, hook)
+git checkout p5-inicio   # lo que quedó al terminar P4 (raíz auditado, F-008)
+git checkout pN-hecho    # el estado al terminar el práctico N, para comparar con el tuyo
+```
+La progresión entera está en la rama `practicos`; `main` queda siempre limpio. Para volver a un estado
+limpio dentro de un práctico: `git checkout . && git clean -fd`.
 
 Tu resultado no va a ser idéntico al del video: depende del modelo, del prompt y del asistente que uses.
 Debería ser parecido. Si no lo es, eso también enseña: fijate qué asumió el tuyo.
