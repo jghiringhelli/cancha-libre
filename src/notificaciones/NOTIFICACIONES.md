@@ -1,6 +1,6 @@
 # Módulo `notificaciones` — la rama del árbol
 
-**Qué hace:** avisar al cliente cuando su reserva se confirma o se cancela.
+**Qué hace:** avisar al cliente cuando su reserva se confirma, se reprograma o se cancela.
 
 **Qué publica:** la interfaz [`NotificacionesPort.ts`](NotificacionesPort.ts) — una función:
 `notificar(clienteId, mensaje)`. La implementación del curso escribe por consola y guarda un
