@@ -1,11 +1,11 @@
 # Criterio 1: crear una reserva válida → 201, y aparece en el listado de la cancha.
-# La cancha es un uuid nuevo por corrida: el estado vive en memoria y así cada probe es independiente.
+# La cancha es un uuid nuevo por corrida, así cada probe es independiente. Las fechas las calcula fechas.ts (F-008).
 POST {{host}}/reservas
 {
   "canchaId": "{{newUuid}}",
   "clienteId": "juan",
-  "inicio": "2030-01-12T18:00:00Z",
-  "fin": "2030-01-12T19:00:00Z",
+  "inicio": "{{inicio}}",
+  "fin": "{{fin}}",
   "precio": 100
 }
 HTTP 201

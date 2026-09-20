@@ -3,8 +3,8 @@ POST {{host}}/reservas
 {
   "canchaId": "{{newUuid}}",
   "clienteId": "juan",
-  "inicio": "2030-01-12T18:00:00Z",
-  "fin": "2030-01-12T19:00:00Z",
+  "inicio": "{{inicio}}",
+  "fin": "{{fin}}",
   "precio": 100
 }
 HTTP 201
@@ -12,13 +12,13 @@ HTTP 201
 cancha: jsonpath "$.canchaId"
 reserva: jsonpath "$.id"
 
-# Superposición parcial: 18:30–19:30 se pisa con 18:00–19:00.
+# Superposición parcial: 18:30–19:30 se pisa con 18:00–19:00 (las variables *Corrido, en fechas.ts).
 POST {{host}}/reservas
 {
   "canchaId": "{{cancha}}",
   "clienteId": "pedro",
-  "inicio": "2030-01-12T18:30:00Z",
-  "fin": "2030-01-12T19:30:00Z",
+  "inicio": "{{inicioCorrido}}",
+  "fin": "{{finCorrido}}",
   "precio": 100
 }
 HTTP 409

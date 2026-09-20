@@ -10,7 +10,7 @@ demuestran los prácticos del curso **GS Core** de PragmaWorks (Especificación 
 git clone https://github.com/jghiringhelli/cancha-libre
 cd cancha-libre
 npm install
-npm test        # 20 tests en verde
+npm test        # 25 tests en verde
 npm run gate    # los gates: componibilidad + ids persistentes
 ```
 

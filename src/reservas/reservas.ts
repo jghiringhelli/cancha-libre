@@ -1,4 +1,4 @@
-// El corazón del sistema. Reglas 1-3 del archivo raíz viven acá.
+// El corazón del sistema. Reglas 1-3 y 5 del archivo raíz viven acá.
 // Este módulo conoce SOLO interfaces ajenas (regla 4 — la defiende el gate).
 import type { PagosPort } from '../pagos/PagosPort';
 import type { NotificacionesPort } from '../notificaciones/NotificacionesPort';
@@ -17,7 +17,7 @@ export interface Reserva {
 }
 
 export class ErrorDeReserva extends Error {
-  constructor(public codigo: 'SUPERPOSICION_DE_RESERVA' | 'SENA_RECHAZADA' | 'RANGO_INVALIDO' | 'RESERVA_INEXISTENTE') {
+  constructor(public codigo: 'SUPERPOSICION_DE_RESERVA' | 'SENA_RECHAZADA' | 'RANGO_INVALIDO' | 'RESERVA_INEXISTENTE' | 'ANTICIPACION_EXCESIVA') {
     super(codigo);
   }
 }
@@ -30,6 +30,11 @@ interface Dependencias {
   ahora?: () => Date;                 // inyectable para tests deterministas
 }
 
+/** Regla 5 (F-008): no se reserva con más de 30 días de anticipación. El número sale de ADR 0005:
+ *  si cambia, cambia el ADR primero (guardarraíl §4b). El borde es inclusivo: 30 días exactos vale. */
+const DIAS_MAXIMOS_DE_ANTICIPACION = 30;
+const MILISEGUNDOS_POR_DIA = 86_400_000;
+
 /** Dos rangos se pisan si uno empieza antes de que el otro termine.
  *  Los bordes exactos NO se pisan: fin 19:00 e inicio 19:00 conviven. */
 function seSuperponen(aInicio: Date, aFin: Date, bInicio: Date, bFin: Date): boolean {
@@ -40,9 +45,13 @@ export function moduloReservas(deps: Dependencias) {
   const ahora = deps.ahora ?? (() => new Date());
 
   return {
-    /** Regla 1 (no superposición) + Regla 2 (sin seña no hay reserva). */
+    /** Regla 1 (no superposición) + Regla 2 (sin seña no hay reserva) + Regla 5 (anticipación máxima). */
     async crearReserva(datos: { canchaId: string; clienteId: string; inicio: Date; fin: Date; precio: number }): Promise<Reserva> {
       if (datos.fin <= datos.inicio) throw new ErrorDeReserva('RANGO_INVALIDO');
+
+      // Se rechaza antes de tocar nada: ni repositorio, ni cobro, ni aviso.
+      const diasDeAnticipacion = (datos.inicio.getTime() - ahora().getTime()) / MILISEGUNDOS_POR_DIA;
+      if (diasDeAnticipacion > DIAS_MAXIMOS_DE_ANTICIPACION) throw new ErrorDeReserva('ANTICIPACION_EXCESIVA');
 
       const existentes = await deps.repositorio.listarPorCancha(datos.canchaId);
       const pisada = existentes.some(r =>

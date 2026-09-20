@@ -1,11 +1,11 @@
 # Criterio 3: cancelar con más de 24 h → 200 y reembolso: true.
-# La reserva es en 2030: sobran las 24 h de anticipación (regla 3 del archivo raíz).
+# {{inicio}} está a una semana (fechas.ts): sobran las 24 h de anticipación (regla 3) y entra en la ventana de 30 días (F-008).
 POST {{host}}/reservas
 {
   "canchaId": "{{newUuid}}",
   "clienteId": "juan",
-  "inicio": "2030-01-12T18:00:00Z",
-  "fin": "2030-01-12T19:00:00Z",
+  "inicio": "{{inicio}}",
+  "fin": "{{fin}}",
   "precio": 100
 }
 HTTP 201

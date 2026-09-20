@@ -14,6 +14,8 @@ import { proveedorSimulado } from '../../src/pagos/proveedorSimulado';
 import { porConsola } from '../../src/notificaciones/porConsola';
 
 const en = (horas: number) => new Date(Date.UTC(2030, 0, 12, horas));
+// F-008: las reservas son en 2030, así que el reloj de cada "proceso" también (regla 5: no más de 30 días).
+const AHORA = new Date(Date.UTC(2030, 0, 10));
 
 // Cada llamada es "un proceso": módulo nuevo, contador (si lo hubiera) en cero. El repositorio es lo único compartido.
 function arrancarProceso(repositorio: RepositorioReservas) {
@@ -22,6 +24,7 @@ function arrancarProceso(repositorio: RepositorioReservas) {
     ids: generadorUuid(),
     pagos: proveedorSimulado(),
     notificaciones: porConsola({ silencioso: true }).port,
+    ahora: () => AHORA,
   });
 }
 

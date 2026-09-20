@@ -20,9 +20,10 @@ const reservas = moduloReservas({
   notificaciones: porConsola().port,
 });
 
-// Cada código del módulo tiene su status HTTP (regla 2 de F-005).
+// Cada código del módulo tiene su status HTTP (regla 2 de F-005; ANTICIPACION_EXCESIVA en F-008).
 const STATUS_POR_CODIGO: Record<ErrorDeReserva['codigo'], number> = {
   RANGO_INVALIDO: 400,
+  ANTICIPACION_EXCESIVA: 400,
   SENA_RECHAZADA: 402,
   RESERVA_INEXISTENTE: 404,
   SUPERPOSICION_DE_RESERVA: 409,

@@ -4,7 +4,7 @@
 
 **Reglas**
 1. No se cambia el módulo `reservas`: la API solo lo llama. Regla 4 del archivo raíz sigue: la API conoce implementaciones (pagos simulado, notificaciones por consola) y se las inyecta; `reservas` no.
-2. Endpoints: `POST /reservas` (crea; 201 con la reserva; 409 si se pisa; 402 si la seña es rechazada; 400 si el rango es inválido), `DELETE /reservas/:id` (cancela; 200 con `{reembolso: true|false}`; 404 si no existe), `GET /canchas/:id/reservas` (lista las confirmadas).
+2. Endpoints: `POST /reservas` (crea; 201 con la reserva; 409 si se pisa; 402 si la seña es rechazada; 400 si el rango es inválido — y, desde F-008, 400 `ANTICIPACION_EXCESIVA` a más de 30 días), `DELETE /reservas/:id` (cancela; 200 con `{reembolso: true|false}`; 404 si no existe), `GET /canchas/:id/reservas` (lista las confirmadas).
 3. Sin dependencias nuevas: `node:http` y nada más. Puerto por variable `PORT`, default 3000.
 4. Estado en memoria (el repositorio que ya existe). Se pierde al reiniciar: está bien para este práctico.
 

@@ -16,6 +16,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
+import { variablesHurl } from '../../probes/fechas.ts';
 
 const HOST = process.env.HOST ?? 'http://localhost:3000';
 const DB_PATH = process.env.DB_PATH ?? 'cancha.db';
@@ -56,7 +57,8 @@ capa('a', `base ${DB_PATH}: ${antes} reservas antes de los probes`);
 const archivos = readdirSync(PROBES).filter(a => a.endsWith('.hurl')).sort().map(a => join(PROBES, a));
 assert.ok(archivos.length > 0, `no hay probes en ${PROBES}/`);
 
-const hurl = spawnSync('hurl', ['--json', '--variable', `host=${HOST}`, ...archivos], { encoding: 'utf8' });
+// Las fechas de los probes se calculan acá (F-008): dentro de la ventana de 30 días, y una fuera.
+const hurl = spawnSync('hurl', ['--json', ...variablesHurl(HOST), ...archivos], { encoding: 'utf8' });
 assert.ok(!hurl.error, `no pude ejecutar hurl: ${hurl.error?.message}`);
 const resultados = hurl.stdout.trim().split('\n').filter(Boolean).map(l => JSON.parse(l) as ResultadoHurl);
 assert.equal(resultados.length, archivos.length, `hurl devolvió ${resultados.length} resultados para ${archivos.length} probes\n${hurl.stderr}`);

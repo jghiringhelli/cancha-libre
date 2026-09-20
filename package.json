@@ -8,7 +8,7 @@
     "test": "vitest run",
     "gate": "sh .githooks/gate-componible.sh && sh .githooks/gate-ids.sh",
     "api": "node --experimental-transform-types src/api/servidor.ts",
-    "probes": "hurl --test --variable host=http://localhost:3000 probes",
+    "probes": "node --experimental-transform-types probes/correr.ts",
     "integracion": "node --experimental-transform-types tests/integracion/tres-capas.ts"
   },
   "devDependencies": {
