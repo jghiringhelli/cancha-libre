@@ -1,1 +1,6 @@
 node_modules/
+# F-006: la base SQLite es estado local, no se versiona
+*.db
+*.db-journal
+*.db-wal
+*.db-shm

@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
-    "gate": "sh .githooks/gate-componible.sh"
+    "gate": "sh .githooks/gate-componible.sh",
+    "api": "node --experimental-transform-types src/api/servidor.ts",
+    "probes": "hurl --test --variable host=http://localhost:3000 probes",
+    "integracion": "node --experimental-transform-types tests/integracion/tres-capas.ts"
   },
   "devDependencies": {
     "typescript": "^5.6.0",
